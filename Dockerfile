@@ -10,6 +10,8 @@ RUN apt-get update && \
     libcurl4-openssl-dev \
     libssl-dev \
     libxml2-dev \
+    liblzma-dev \
+    libbz2-dev \
     zlib1g-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
