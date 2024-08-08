@@ -6,19 +6,22 @@ library(dplyr)
 args <- commandArgs(trailingOnly = TRUE)
 
 # Check if the correct arguments are provided
-if (length(args) != 8) {
-  stop("Usage: script.R <mutant> <wt> <param> <bed_file> <logFC_threshold> <FDR_threshold> <use_spikein> <spikein_pattern>")
+if (length(args) != 9) {
+  stop("Usage: script.R <mutant> <wt> <param> <bed_file> <logFC_threshold> <FDR_threshold> <use_spikein> <spikein_pattern> <output_dir>")
 }
 
 # Assign arguments to variables
 mutant <- args[1]
 wt <- args[2]
 param <- args[3]
+bed_file <- args[4]
 logFC_threshold <- as.numeric(args[5])
 FDR_threshold <- as.numeric(args[6])
 use_spikein <- as.logical(args[7])
 spikein_pattern <- args[8]
-bed_file <- args[4]
+output_dir<-args[9]
+
+
 
 # Construct the comparison name
 comp <- paste0(mutant, "_vs_", wt)
@@ -57,7 +60,7 @@ if (use_spikein) {
   names(perMillion_factors) <- bam_names
 
   # Write normalization factors to disk
-  write.table(t(perMillion_factors), file = paste0(comp, "_normfactors_bamcov.txt"), sep = "\t", quote = FALSE,
+  write.table(t(perMillion_factors), file = paste0(output_dir,comp, "_normfactors_bamcov.txt"), sep = "\t", quote = FALSE,
               row.names = FALSE)
 
 } else {
@@ -71,7 +74,7 @@ if (use_spikein) {
   names(perMillion_factors) <- bam_names
 
   # Write normalization factors to disk
-  write.table(t(perMillion_factors), file = paste0(comp, "_normfactors_bamcov.txt"), sep = "\t", quote = FALSE,
+  write.table(t(perMillion_factors), file = paste0(output_dir,comp, "_normfactors_bamcov.txt"), sep = "\t", quote = FALSE,
               row.names = FALSE)
 }
 
@@ -87,7 +90,7 @@ TMM_counts <- assay(peak_counts) * perMillion_factors
 colnames(TMM_counts) <- bam_names
 merged <- as.data.frame(merged)
 TMM_counts <- cbind(merged[, 1:3], TMM_counts)
-write.table(TMM_counts, file = paste0(comp, "_TMM_counts.tsv"), row.names = FALSE, quote = FALSE, sep = "\t")
+write.table(TMM_counts, file = paste0(output_dir,comp, "_TMM_counts.tsv"), row.names = FALSE, quote = FALSE, sep = "\t")
 
 print("Preparing design for comparisons...")
 
@@ -127,8 +130,8 @@ mutant_nochange <- comp_table %>% filter(abs(logFC) < logFC_threshold | FDR > FD
 print("Writing results to output files...")
 
 # Write results to output files
-write.table(mutant_increase, file = paste0(mutant, "_enriched.tsv"), row.names = FALSE, quote = FALSE, sep = "\t")
-write.table(mutant_decrease, file = paste0(wt, "_enriched.tsv"), row.names = FALSE, quote = FALSE, sep = "\t")
-write.table(mutant_nochange, file = paste0(comp, "_nochange.tsv"), row.names = FALSE, quote = FALSE, sep = "\t")
+write.table(mutant_increase, file = paste0(output_dir,mutant, "_enriched.tsv"), row.names = FALSE, quote = FALSE, sep = "\t")
+write.table(mutant_decrease, file = paste0(output_dir,wt, "_enriched.tsv"), row.names = FALSE, quote = FALSE, sep = "\t")
+write.table(mutant_nochange, file = paste0(output_dir,comp, "_nochange.tsv"), row.names = FALSE, quote = FALSE, sep = "\t")
 
 print("Process completed.")
