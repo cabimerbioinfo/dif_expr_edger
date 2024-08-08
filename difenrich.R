@@ -52,9 +52,8 @@ if (use_spikein) {
   endog_data <- large_bins_counts[!is_spikein,]
 
 # Normalize endogenous data using spike-in data
-  endog_data <- normFactors(spike_data, se.out = endog_data)
+  norm_factors <- normFactors(spike_data, se.out = endog_data)
   library_sizes <- endog_data$totals
-  norm_factors <- normFactors(endog_data)
   final_factors <- norm_factors$norm.factors * library_sizes
   perMillion_factors <- (final_factors / 1000000)^-1
   names(perMillion_factors) <- bam_names
