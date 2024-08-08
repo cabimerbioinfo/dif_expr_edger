@@ -4,4 +4,4 @@ This Docker container is based on Rocker 4.4.0 and includes the following R pack
 *Usage*: docker run --rm -v $(pwd):/workspace dif_expr_edger:v1 /scripts/difexpr.R <cond1> <cond2> </workspace/path_to_gtf_file> <normalization method (TMM, RLE, upperquartile)> <FDR threshold> <log2fc threshold> </workspace/output_dir> </workspace/path_to_bams_cond1> </workspace/path_to_bams_cond2> <PE (true) or SE (false)> <spike-in (true or false)> <spike-in pattern>
 
 **DB analysis with difenrich.R**
-*Usage*: docker run --rm -v $(pwd):/workspace dif_expr_edger:v1 /scripts/difenrich.R <mutant> <wt> <param> <bed_file> <logFC_threshold> <FDR_threshold> <use_spikein> <spikein_pattern>
+*Usage*: docker run --rm -v $(pwd):/workspace dif_expr_edger:v1 /scripts/difenrich.R <mutant> <wt> <param> <bed_file> <logFC_threshold> <FDR_threshold> <use_spikein> <spikein_pattern> </workspace/output_dir>
